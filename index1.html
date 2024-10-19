@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Donation Portal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+
+    <!-- Donation Form -->
+    <div class="form-container">
+      <form id="donationForm" onsubmit="return false;"> <!-- Prevent default submission -->
+        <label for="donorName">Your Name</label>
+        <h6 style="color: red;">*Enter alphabets only</h6>
+        <input type="text" id="donorName" name="donorName" required>
+
+        <label for="contact">Contact</label>
+        <input type="number" id="contact" name="contact" required>
+
+        <label for="foodItem">Food Item</label>
+        <input type="text" id="foodItem" name="foodItem" required>
+
+        <label for="quantity">Quantity</label>
+        <input type="text" id="quantity" name="quantity" required>
+
+        <label for="expiryDate">Expiry Date</label>
+        <input type="date" id="expiryDate" name="expiryDate" required>
+
+        <label for="location">Location</label>
+        <input type="text" id="location" name="location" required onclick="getLocation()">
+
+        <button type="button" id="submitBtn">Submit Donation</button>
+      </form>
+    </div>
+
+  <script>
+    // Function to get donations from localStorage
+    function getDonationsFromStorage() {
+      return JSON.parse(localStorage.getItem('donations')) || [];
+    }
+
+    // Function to save donations to localStorage
+    function saveDonationsToStorage(donations) {
+      localStorage.setItem('donations', JSON.stringify(donations));
+    }
+
+    // Function to get user's location
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(success, showError);
+      } else {
+        alert('Geolocation is not supported by your browser.');
+      }
+    }
+
+    // Success callback for geolocation
+    function success(position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      // Call the reverse geocoding service
+      fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`)
+        .then(response => response.json())
+        .then(data => {
+          const address = data.address;
+          const city = address.city || address.town || address.village || '';
+          const state = address.state || '';
+          const country = address.country || '';
+          const district = address.county || '';
+
+          // Fill the location input
+          document.getElementById('location').value = `${city}, ${district}, ${state}, ${country}`;
+        })
+        .catch(error => {
+          alert("Unable to retrieve location details.");
+          console.error('Error fetching location:', error);
+        });
+    }
+
+    // Error callback for geolocation
+    function showError(error) {
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          alert("User denied the request for Geolocation.");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          alert("Location information is unavailable.");
+          break;
+        case error.TIMEOUT:
+          alert("The request to get user location timed out.");
+          break;
+        case error.UNKNOWN_ERROR:
+          alert("An unknown error occurred.");
+          break;
+      }
+    }
+
+    // Function to validate form input
+    function validateForm() {
+      const donorName = document.getElementById('donorName').value;
+      const namePattern = /^[A-Za-z\s]+$/; // Regex for alphabets only
+
+      if (!namePattern.test(donorName)) {
+        alert("Enter a valid name (alphabets only).");
+        return false;
+      }
+
+      return true; // Form is valid
+    }
+
+    // Submit button click event
+    document.getElementById('submitBtn').addEventListener('click', function() {
+      if (validateForm()) {
+        const donorName = document.getElementById('donorName').value;
+        const foodItem = document.getElementById('foodItem').value;
+        const quantity = document.getElementById('quantity').value;
+        const expiryDate = document.getElementById('expiryDate').value;
+        const location = document.getElementById('location').value;
+
+        // Store donation data
+        const donation = {
+          donorName,
+          foodItem,
+          quantity,
+          expiryDate,
+          location
+        };
+
+        // Get existing donations from localStorage
+        const donations = getDonationsFromStorage();
+        donations.push(donation); // Add new donation
+        saveDonationsToStorage(donations); // Save to localStorage
+
+        // Redirect to thank you page
+        window.location.href = 'thankyou.html'; // Redirect to thank you page
+      }
+    });
+
+    // On page load, retrieve donations from localStorage
+    window.onload = function() {
+      const donations = getDonationsFromStorage();
+      updateDonationList(donations); // Display existing donations
+    };
+
+    // Function to update the donation list display (if needed)
+    function updateDonationList(donations) {
+      const donationList = document.getElementById('donationList');
+      donationList.innerHTML = ''; // Clear the list
+
+      donations.forEach((donation) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${donation.donorName} donated ${donation.quantity} of ${donation.foodItem}. Expiry Date: ${donation.expiryDate}. Location: ${donation.location}.`;
+        donationList.appendChild(listItem);
+      });
+    }
+  </script>
+
+</body>
+</html>

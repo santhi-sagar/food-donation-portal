@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - Food Donation Portal</title>
+  <link rel="stylesheet" href="style1.css">
+  <style>
+    .container {
+      position: relative; /* Make container relative for positioning the hamburger */
+    }
+    
+    .hamburger {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+      font-size: 24px;
+      z-index: 1000; /* Ensure it appears above other content */
+    }
+    
+    .recent-donations-list {
+      display: none; /* Hide by default */
+      position: absolute;
+      top: 40px; /* Adjust as needed */
+      right: 10px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+      z-index: 1000;
+      padding: 10px;
+      max-height: 200px; /* Limit height */
+      overflow-y: auto; /* Add scroll if needed */
+    }
+
+    .taskbar {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: none; /* Hide the taskbar initially */
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 10px;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .taskbar button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .taskbar button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>About Us</h1>
+    
+    <div class="hamburger" id="hamburgerBtn">☰</div>
+
+    <p>
+      At the <strong>Local Food Donation Portal</strong>, our mission is to bridge the gap between food surplus and hunger. We believe that no food should go to waste when there are people in need. Your generous donations make a real difference in the lives of many.
+    </p>
+
+    <div class="quotes">
+      <blockquote>
+        "The best way to find yourself is to lose yourself in the service of others." <br>
+        – Mahatma Gandhi
+      </blockquote>
+    </div>
+
+    <div class="donate-section">
+      <h2>Ready to Make a Difference?</h2>
+      <button id="donateBtn">Donate Now</button>
+    </div>
+    
+    <div class="recent-donations-list" id="recentDonationsList">
+      <h3>Recent Donations</h3>
+      <ul id="recentDonationItems"></ul>
+    </div>
+  </div>
+
+  <script>
+    // When the 'Donate Now' button is clicked, navigate to index.html
+    document.getElementById('donateBtn').addEventListener('click', function() {
+      window.location.href = 'index1.html';
+    });
+
+    // When the hamburger button is clicked, toggle the recent donations list
+    document.getElementById('hamburgerBtn').addEventListener('click', function() {
+      const recentDonationsList = document.getElementById('recentDonationsList');
+      recentDonationsList.style.display = recentDonationsList.style.display === 'none' ? 'block' : 'none';
+      updateRecentDonations();
+    });
+
+    // Function to update recent donations list from localStorage
+    function updateRecentDonations() {
+      const recentDonationItems = document.getElementById('recentDonationItems');
+      const donations = JSON.parse(localStorage.getItem('donations')) || [];
+      recentDonationItems.innerHTML = ''; // Clear the list
+
+      if (donations.length === 0) {
+        recentDonationItems.innerHTML = '<li>No recent donations available.</li>';
+        return;
+      }
+
+      donations.forEach((donation) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${donation.donorName} donated ${donation.quantity} of ${donation.foodItem}. Expiry Date: ${donation.expiryDate}. Location: ${donation.location}.`;
+        recentDonationItems.appendChild(listItem);
+      });
+    }
+  </script>
+</body>
+</html>

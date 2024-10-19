@@ -1,0 +1,56 @@
+/* Styling for the page background */
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('fd.jpg'); /* Make sure this path is correct */
+    background-size: cover; /* Ensure the image covers the entire background */
+    background-position: center; /* Center the image */
+    background-attachment: fixed; /* Make the background fixed when scrolling */
+    background-repeat: no-repeat; /* Avoid tiling the image */
+    margin: 0;
+    padding: 0;
+    color: #333; /* Ensure text color is legible over the background */
+}
+
+/* Container to add background transparency */
+.container {
+    width: 80%; /* Adjust width as needed */
+    max-width: 600px; /* Set a maximum width */
+    margin: 50px auto; /* Center the container */
+    padding: 30px; /* Add padding for inner spacing */
+    background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent white background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2); /* Soft shadow effect */
+    text-align: center; /* Center text within the container */
+}
+
+/* Additional styling for the About page quotes */
+.quotes {
+    margin: 30px 0;
+}
+
+blockquote {
+    font-style: italic; /* Italic text for the quote */
+    margin: 20px 0; /* Vertical margin for spacing */
+}
+
+/* Styling for the donate section */
+.donate-section {
+    margin-top: 30px; /* Space above the section */
+}
+
+#donateBtn {
+    background-color: #28a745; /* Button color */
+    color: white; /* Text color */
+    padding: 15px 30px; /* Padding for button */
+    font-size: 18px; /* Font size */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+}
+
+/* Hover effect for the button */
+#donateBtn:hover {
+    background-color: #218838; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
+}

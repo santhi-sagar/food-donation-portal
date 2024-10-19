@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recent Donations - Food Donation Portal</title>
+  <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Recent Donations</h1>
+    <ul id="recentDonationList"></ul>
+  </div>
+
+  <script>
+    // Function to display recent donations from localStorage
+    function displayRecentDonations() {
+      const recentDonationList = document.getElementById('recentDonationList');
+      const storedDonations = JSON.parse(localStorage.getItem('donations')) || [];
+      recentDonationList.innerHTML = ''; // Clear the list
+
+      if (storedDonations.length === 0) {
+        recentDonationList.innerHTML = '<li>No recent donations available.</li>';
+        return;
+      }
+
+      storedDonations.forEach((donation) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${donation.donorName} donated ${donation.quantity} of ${donation.foodItem}. Expiry Date: ${donation.expiryDate}. Location: ${donation.location}.`;
+        recentDonationList.appendChild(listItem);
+      });
+    }
+
+    // Run the function to display recent donations when the page loads
+    window.onload = function() {
+      displayRecentDonations();
+    };
+  </script>
+</body>
+</html>
